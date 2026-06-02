@@ -6,25 +6,44 @@ import CommonSlider from "../components/SliderComponent/simple_slider"
 // images
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { getOffers, getTopSellingProducts } from "../api/offers_api"
+import { getCategories, getOffers, getProducts, getTopSellingProducts } from "../api/offers_api"
 import almondChocolate from "../assets/images/almond-chocolate.jpg"
 
 import { supabase } from "../config/supabaseClient"
+import Loader from "../components/CommonComponent/loader"
 
 const Home = () => {
     const [offers, setOffers] = useState()
     const [topSell, setTopSell] = useState()
-    useEffect(() => {
-        const fetchData = async () => {
-            const offersData = await getOffers();
-            setOffers(offersData);
-            const topSellData = await getTopSellingProducts();
-            setTopSell(topSellData);
-        };
-        fetchData();
+    const [categories, setCategories] = useState([])
+    const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    // useEffect(() => {
+    //     const fetchCategories = async () => {
+    //         const data = await getCategories();
+    //         console.log("received:", data);
+    //         setCategories(data || []);
+    //         setLoading(false)
+    //     };
+
+    //     fetchCategories();
+    // }, []);
 
 
-    }, [])
+
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const offersData = await getOffers();
+    //         setOffers(offersData);
+    //         const topSellData = await getTopSellingProducts();
+    //         setTopSell(topSellData);
+    //     };
+    //     fetchData();
+
+
+    // }, [])
 
 
 
@@ -66,22 +85,54 @@ const Home = () => {
         },
     ];
 
-  //   useEffect(() => {
-  //   const getCategories = async () => {
-  //     const { data, error } = await supabase
-  //       .from('categories')
-  //       .select('*');
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const data = await getCategories();
+            console.log("Received:", data);
+            setCategories(data);
+            setLoading(false);
+        };
+        fetchCategories();
+    }, []);
 
-  //     console.log('Data:', data);
-  //     console.log('Error:', error);
-  //   };
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const data = await getProducts();
+            console.log("Received Products:", data);
+            setProducts(data);
+            setLoading(false);
+        };
+        fetchProducts();
+    }, []);
 
-  //   getCategories();
-  // }, []);
+    if (loading) {
+        return <><Loader /></>;
+    }
 
     return (
         <div className="flex flex-col gap-[50px]">
             <h1>Home</h1>
+
+            <div>
+                <div className="flex items-center justify-center gap-[20px]">
+                    {categories.map((data) => (
+                        <button key={data.id}
+                            className="font-roboto text-[16px] rounded-full px-[20px] py-[7px] transition duration-300 border border-[#000] text-[#000] hover:bg-[#000] hover:text-[#fff]">
+                            {data.name}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                {products.map((data) => (
+                    <button key={data.id}
+                        className="font-roboto text-[16px] rounded-full px-[20px] py-[7px] transition duration-300 border border-[#000] text-[#000] hover:bg-[#000] hover:text-[#fff]">
+                        {data.name}
+                    </button>
+                ))}
+            </div>
+
             <div className="max-w-6xl mx-auto flex flex-col gap-[30px] p-[30px]">
                 <h2 className="sm:text-[18px] lg:text-[20px] 2xl:text-[30px] text-center font-bold font-roboto text-[#1C1209]">Chocolate Delights & Services</h2>
                 <p className="text-[16px] text-center font-normal font-roboto text-[#1C1209]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur ab dolore ipsum facere provident id omnis, quasi dolorem veniam similique nihil illo eligendi, laboriosam nulla, ipsam libero nobis est enim!</p>
