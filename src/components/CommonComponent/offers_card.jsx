@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { formattedamount } from "../../utils/HelperFunction"
+import { formattedAmount } from "../../utils/HelperFunction"
 
 const OfferCard = (item) => {
     return (
@@ -13,8 +13,8 @@ const OfferCard = (item) => {
             </Link>
             <div className="flex justify-between items-center">
                 <div className="flex flex-col 2xl:gap-[5px]">
-                    <h6 className="m-0 text-[14px] font-roboto font-normal line-through text-[#1C1209]">{formattedamount(item.offerData.actual_amount)}</h6>
-                    <h4 className="m-0 text-[18px] 2xl:text-[20px] font-roboto font-normal text-[#CC7874]">{formattedamount(item.offerData.sale_amount)}</h4>
+                    <h6 className="m-0 text-[14px] font-roboto font-normal line-through text-[#1C1209]">{formattedAmount(item.offerData.actual_amount)}</h6>
+                    <h4 className="m-0 text-[18px] 2xl:text-[20px] font-roboto font-normal text-[#CC7874]">{formattedAmount(item.offerData.sale_amount)}</h4>
                 </div>
                 <button className="flex gap-[5px] px-[20px] py-[7px] rounded-full m-0 text-[16px] font-roboto font-normal transition duration-300 text-[#E8DED5] bg-[#4E342E] hover:bg-[#1C1209]">Add To Cart</button>
             </div>

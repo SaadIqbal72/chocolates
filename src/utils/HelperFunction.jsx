@@ -1,4 +1,4 @@
-export const formattedamount = (amount) => {
+export const formattedAmount = (amount) => {
     const value = Number(amount) || 0;
 
     return `Rs. ${value.toLocaleString('en-PK', {
