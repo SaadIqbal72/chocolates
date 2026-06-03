@@ -15,7 +15,7 @@ const ArticleCard = (data) => {
                     <p className="m-0 text-[16px] font-roboto font-normal text-[#1C1209]">{truncateText(data.articleData.content)}</p>
                     <div className="flex items-center justify-between">
                         <h4 className="m-0 flex items-center gap-[5px] px-[10px] py-[5px] rounded-full text-[14px] font-roboto font-normal text-[#4E342E] bg-[#DCD6D5]">{formattedDate(data.articleData.created_at)}</h4>
-                        <Link to={`/article/detail/${data.articleData.slug}`}>
+                        <Link to={`/article/${data.articleData.slug}`}>
                             <FontAwesomeIcon icon={faArrowRight} />
                         </Link>
                     </div>

@@ -1,13 +1,49 @@
 import { Link, useParams } from "react-router-dom"
 import QuantityCounter from "../components/CommonComponent/quantity_counter";
+import { useEffect, useState } from "react";
+import { getProductDetail, getReleatedProducts } from "../api/offers_api";
+import Loader from "../components/CommonComponent/loader";
 
 const ProductDetail = () => {
-    const { id } = useParams();
+    const { id: slug } = useParams();
+    const [loading, setLoading] = useState(true)
+    const [product, setProduct] = useState(null);
+    const [relatedProduct, setRelatedProduct] = useState([]);
+
+    useEffect(() => {
+        const fetchProductDetail = async () => {
+            setLoading(false);
+            const data = await getProductDetail(slug)
+            console.log("Product Detail:", data);
+            if (data) {
+                setProduct(data);
+                if (data.category_id) {
+                    const relatedProductData = await getReleatedProducts(data.category_id, data.id)
+                    setRelatedProduct(relatedProductData);
+                }
+                setLoading(false);
+            }
+        };
+        fetchProductDetail();
+    }, [slug])
+
+    if (loading) {
+        return <Loader />;
+    }
+
+    if (!product) {
+        return (
+            <div className="max-w-7xl mx-auto min-h-screen flex items-center justify-center">
+                <h2 className="text-2xl font-bold text-red-600">Product not found.</h2>
+            </div>
+        );
+    }
+    
     return (
         <div className="max-w-7xl mx-auto min-h-screen flex flex-col gap-[50px]">
             <div className="grid grid-cols-2 gap-[12px]">
                 <div className="">
-                    <h1>{id}</h1>
+                    {/* <h1>{id}</h1> */}
                 </div>
                 <div className="flex flex-col gap-[20px]">
                     <div className="flex items-center justify-between">

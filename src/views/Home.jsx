@@ -1,14 +1,12 @@
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { getArticles, getCategories, getOffers, getProducts, getTopSellingProducts } from "../api/offers_api"
-import { supabase } from "../config/supabaseClient"
+import { getArticles, getCategories, getProducts } from "../api/offers_api"
 import Loader from "../components/CommonComponent/loader"
 import ArticleCard from "../components/CommonComponent/article_card"
 import ChocolateCard from "../components/CommonComponent/chocolate_card"
 import OfferCard from "../components/CommonComponent/offers_card"
 import CommonSlider from "../components/SliderComponent/simple_slider"
-// images
-import almondChocolate from "../assets/images/almond-chocolate.jpg"
+
 
 const Home = () => {
     const [offers, setOffers] = useState()
@@ -18,44 +16,17 @@ const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [products, setProducts] = useState([])
     const [articles, setArticles] = useState([])
+    const [review, setReview] = useState([])
 
-    const articleCardData = [
-        {
-            id: 1,
-            article_image: almondChocolate,
-            title: "Health benefits of dark chocolate",
-            article_slug: "health-benefits-of-dark-chocolate",
-            description: "A smooth blend of Hazelnut and Chocolate",
-        },
-        {
-            id: 2,
-            article_image: almondChocolate,
-            title: "Health benefits of dark chocolate",
-            article_slug: "health-benefits-of-dark-chocolate",
-            description: "A smooth blend of Hazelnut and Chocolate",
-        },
-        {
-            id: 3,
-            article_image: almondChocolate,
-            title: "Health benefits of dark chocolate",
-            article_slug: "health-benefits-of-dark-chocolate",
-            description: "A smooth blend of Hazelnut and Chocolate",
-        },
-        {
-            id: 4,
-            article_image: almondChocolate,
-            title: "Health benefits of dark chocolate",
-            article_slug: "health-benefits-of-dark-chocolate",
-            description: "A smooth blend of Hazelnut and Chocolate",
-        },
-        {
-            id: 5,
-            article_image: almondChocolate,
-            title: "Health benefits of dark chocolate",
-            article_slug: "health-benefits-of-dark-chocolate",
-            description: "A smooth blend of Hazelnut and Chocolate",
-        },
-    ];
+    useEffect(() => {
+        const fetchArticles = async () => {
+            const data = await getArticles();
+            console.log("Review:", data);
+            setReview(data);
+            setLoading(false);
+        }
+        fetchArticles();
+    }, []);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -202,6 +173,22 @@ const Home = () => {
                             <ArticleCard articleData={data} />
                         )} />
                     <Link to="/article" className="flex justify-center gap-[5px] w-max px-[30px] py-[7px] rounded-full m-0 text-[16px] font-roboto font-normal transition duration-300 border border-[#4E342E] text-[#4E342E] hover:text-[#E8DED5] hover:bg-[#1C1209]">View All</Link>
+                </div>
+            </div>
+
+            <div className="max-w-6xl mx-auto flex flex-col gap-[30px] p-[30px]">
+                <div className="relative flex flex-col gap-[30px] p-[30px] mx-[50px] z-[1]">
+                    <h2 className="sm:text-[18px] lg:text-[20px] 2xl:text-[30px] text-center font-bold font-roboto text-[#000]">Customer Reviews</h2>
+                    <CommonSlider
+                        data={review}
+                        slidesPerView={1}
+                        renderItem={(data) => (
+                            <>
+                                <h2>{data.title}</h2>
+                                <p>{data.content}</p>
+                            </>
+                        )}
+                    />
                 </div>
             </div>
         </div>
